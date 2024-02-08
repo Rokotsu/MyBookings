@@ -71,12 +71,12 @@ class BookingDAO(BaseDAO):
                     .cte("booked_rooms")
                 )
 
-                """
+                """""
                 SELECT rooms.quantity - COUNT(booked_rooms.room_id) FROM rooms
                 LEFT JOIN booked_rooms ON booked_rooms.room_id = rooms.id
                 WHERE rooms.id = 1
                 GROUP BY rooms.quantity, booked_rooms.room_id
-                """
+                """""
 
                 get_rooms_left = (
                     select(
@@ -89,9 +89,6 @@ class BookingDAO(BaseDAO):
                     .where(Rooms.id == room_id)
                     .group_by(Rooms.quantity, booked_rooms.c.room_id)
                 )
-
-                # Рекомендую выводить SQL запрос в консоль для сверки
-                # logger.debug(get_rooms_left.compile(engine, compile_kwargs={"literal_binds": True}))
 
                 rooms_left = await session.execute(get_rooms_left)
                 rooms_left: int = rooms_left.scalar()
