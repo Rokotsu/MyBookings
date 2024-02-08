@@ -79,7 +79,6 @@ app.include_router(router_pages)
 if settings.MODE == "TEST":
     # При тестировании через pytest, необходимо подключать Redis, чтобы кэширование работало.
     # Иначе декоратор @cache из библиотеки fastapi-cache ломает выполнение кэшируемых эндпоинтов.
-    # Из этого следует вывод, что сторонние решения порой ломают наш код, и это бывает проблематично поправить.
     redis = aioredis.from_url(f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}", encoding="utf8", decode_responses=True)
     FastAPICache.init(RedisBackend(redis), prefix="cache")
 
